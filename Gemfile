@@ -1,7 +1,9 @@
 source "https://rubygems.org"
 
+gem "bcrypt", "3.1.12"
 gem "bootstrap-sass", "3.3.7"
 gem "coffee-rails", "4.2.2"
+gem "config"
 gem "jbuilder", "2.7.0"
 gem "jquery-rails", "4.3.1"
 gem "puma", "3.9.1"
