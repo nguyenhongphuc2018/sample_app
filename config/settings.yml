@@ -1,0 +1,6 @@
+name:
+  max: 50
+email:
+  max: 250
+pass:
+  min: 6  
