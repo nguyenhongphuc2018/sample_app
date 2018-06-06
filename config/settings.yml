@@ -1,6 +1,7 @@
-name:
-  max: 50
+username:
+  maximum: 50
 email:
-  max: 250
+  maximum: 250
 pass:
-  min: 6  
+  minimum: 6
+size: 80    

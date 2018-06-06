@@ -4,9 +4,11 @@ en:
   login: "Log in"
   about: "About"
   contact: "Contact"
+  sign_up: "Sign Up"
   rails: "Ruby on Rails Tutorial"
   ruby_rails: "Ruby on Rails"
   ruby_rails_sample: "Ruby on Rails Tutorial Sample App"
+  the_form: "The form contains"
   about_page:
     screencast: "screencast serires"
     to_teach: "to teach web development with"
@@ -26,3 +28,6 @@ en:
     the: "the"
     by: "by"
     news: "News"
+  new:
+    confirm: "Confirmation"
+    create_account: "Create my account"
