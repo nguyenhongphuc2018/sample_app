@@ -31,3 +31,5 @@ en:
   new:
     confirm: "Confirmation"
     create_account: "Create my account"
+  invalid: "Invalid email/password combination"
+  signnow: "Sign up now!"
