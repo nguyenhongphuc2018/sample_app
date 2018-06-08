@@ -4,8 +4,8 @@ class ApplicationController < ActionController::Base
 
   def not_found
     raise ActiveRecord::RecordNotFound, "Not Found"
-  rescue StandardError
-    render_404
+    rescue StandardError
+      render_404
   end
 
   private
