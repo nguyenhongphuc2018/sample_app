@@ -33,3 +33,4 @@ en:
     create_account: "Create my account"
   invalid: "Invalid email/password combination"
   signnow: "Sign up now!"
+  remeber_me: "Remember me on this computer"
