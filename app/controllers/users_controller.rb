@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :admin_user, only: :destroy
 
   def index
-    @users = User.paginate page: params[:page]
+    @users = User.where(activated: FILL_IN).paginate(page: params[:page])
   end
 
   def destroy
@@ -18,15 +18,15 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find_by id: params[:id]
+    redirect_to root_url and return unless FILL_IN
   end
 
   def create
     @user = User.new user_params
     if @user.save
-      log_in @user
-      flash[:success] = t "home_page.welcome"
-      redirect_to @user
+      @user.send_activation_email
+      flash[:info] = "Please check your email to activate your account."
+      redirect_to root_url
     else
       render :new
     end
@@ -59,6 +59,13 @@ class UsersController < ApplicationController
     redirect_to(root_url) unless @user == current_user
   end
 
+  # Returns true if the given token matches the digest.
+  def authenticated?(attribute, token)
+    digest = send("#{attribute}_digest")
+    return false if digest.nil?
+    BCrypt::Password.new(digest).is_password?(token)
+  end
+  
   private
   def user_params
     params.require(:user).permit :name, :email, :password,
