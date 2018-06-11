@@ -8,7 +8,7 @@ class User < ApplicationRecord
     uniqueness: {case_sensitive: false}
   has_secure_password
   validates :password, presence: true,
-    length: {minimum: Settings.pass.minimum}
+    length: {minimum: Settings.pass.minimum}, allow_nil: true
 
   # Returns the hash digest of the given string.
   def self.digest string
@@ -36,6 +36,10 @@ class User < ApplicationRecord
 
   def forget
     update_attribute(:remember_digest, nil)
+  end
+
+  def current_user? user
+    self == user
   end
 
   private

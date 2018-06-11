@@ -4,4 +4,5 @@ email:
   maximum: 250
 pass:
   minimum: 6
-size: 80    
+size: 80
+size_image: 50    
