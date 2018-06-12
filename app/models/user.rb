@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
   before_save :email_downcase
   before_create :create_activation_digest
   validates :name, presence: true, length: {maximum: Settings.username.maximum}
@@ -52,6 +52,23 @@ class User < ApplicationRecord
   # Activates an account.
   def activate
     update_columns(activated: true, activated_at: Time.zone.now)
+  end
+
+  # Sets the password reset attributes.
+  def create_reset_digest
+    self.reset_token = User.new_token
+    digest = User.digest reset_token
+    update_columns reset_digest: digest, reset_sent_at: Time.zone.now
+  end
+
+  # Sends password reset email.
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
+  end
+
+  # Returns true if a password reset has expired.
+  def password_reset_expired?
+    reset_sent_at < Settings.time_limit.hours.ago
   end
 
   private

@@ -5,4 +5,5 @@ email:
 pass:
   minimum: 6
 size: 80
-size_image: 50    
+size_image: 50
+time_limit: 2    
