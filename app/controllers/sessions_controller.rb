@@ -2,9 +2,9 @@ class SessionsController < ApplicationController
   def new; end
 
   def create
-    user = User.find_by(email: params[:session][:email].downcase)
+    user = User.find_by email: params[:session][:email].downcase
     if user && user.authenticate(params[:session][:password])
-      login user
+      user_active user
     else
       flash.now[:danger] = t "invalid"
       render :new
@@ -17,9 +17,15 @@ class SessionsController < ApplicationController
   end
 
   private
-  def login user
-    log_in user
-    params[:session][:remember_me] == "1" ? remember(user) : forget(user)
-    redirect_back_or user
+  def user_active user
+    if user.activated?
+      log_in user
+      params[:session][:remember_me] == "1" ? remember(user) : forget(user)
+      redirect_back_or user
+    else
+      message  =  t "acc_activated"
+      flash[:warning] = message
+      redirect_to root_url
+    end
   end
 end
