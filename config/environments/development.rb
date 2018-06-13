@@ -23,6 +23,7 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
   config.assets.debug = true
 
+  config.middleware.use I18n::JS::Middleware
   config.assets.quiet = true
 
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker

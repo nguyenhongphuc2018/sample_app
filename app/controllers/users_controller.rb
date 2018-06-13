@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_action :find_user, except: [:index, :new, :create]
 
   def index
-    @users = User.order(id: :desc).paginate(page: params[:page])
+    @users = User.order(id: :desc).paginate page: params[:page]
   end
 
   def new
@@ -23,7 +23,10 @@ class UsersController < ApplicationController
     end
   end
 
-  def show; end
+  def show
+    @user = User.find_by id: params[:id] || not_found 
+    @microposts = @user.microposts.paginate page: params[:page]
+  end
 
   def edit; end
 
@@ -54,13 +57,6 @@ class UsersController < ApplicationController
   # Confirms an admin user.
   def admin_user
     redirect_to(root_url) unless current_user.admin?
-  end
-
-  # Confirms a logged-in user.
-  def logged_in_user
-    return if logged_in?
-    flash[:danger] = t "pls_login"
-    redirect_to login_url
   end
 
   # Confirms the correct user.
