@@ -6,6 +6,7 @@ class Micropost < ApplicationRecord
   validates :content, presence: true,
     length: {maximum: Settings.content.maximun}
   validate  :picture_size
+  scope :feed, ->(id){ where(user_id: id) }
 
   def picture_size
     return unless picture.size > Settings.weigth_image.megabytes
