@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :microposts, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :email_downcase
   before_create :create_activation_digest
@@ -10,6 +11,10 @@ class User < ApplicationRecord
   has_secure_password
   validates :password, presence: true,
     length: {minimum: Settings.pass.minimum}, allow_nil: true
+
+  def feed
+    Micropost.by_user id
+  end
 
   # Returns the hash digest of the given string.
   def self.digest string
