@@ -19,11 +19,11 @@ class MicropostsController < ApplicationController
       redirect_to request.referrer || root_url
     else
       flash.now[:warring] = t "error"
-    end   
+    end
   end
 
   private
-  
+
   def micropost_params
     params.require(:micropost).permit :content, :picture
   end

@@ -1,5 +1,11 @@
 class User < ApplicationRecord
   has_many :microposts, dependent: :destroy
+  has_many :active_relationships, class_name: Relationship.name,
+    foreign_key: :follower_id, dependent: :destroy
+  has_many :passive_relationships, class_name: Relationship.name,
+    foreign_key: :followed_id, dependent: :destroy
+  has_many :followers, through: :passive_relationships, source: :follower
+  has_many :following, through: :active_relationships, source: :followed
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :email_downcase
   before_create :create_activation_digest
@@ -12,11 +18,6 @@ class User < ApplicationRecord
   validates :password, presence: true,
     length: {minimum: Settings.pass.minimum}, allow_nil: true
 
-  def feed
-    Micropost.by_user id
-  end
-
-  # Returns the hash digest of the given string.
   def self.digest string
     cost =  if ActiveModel::SecurePassword.min_cost
               BCrypt::Engine::MIN_COST
@@ -49,40 +50,46 @@ class User < ApplicationRecord
     self == user
   end
 
-  # Sends activation email.
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
   end
 
-  # Activates an account.
   def activate
     update_columns(activated: true, activated_at: Time.zone.now)
   end
 
-  # Sets the password reset attributes.
   def create_reset_digest
     self.reset_token = User.new_token
     digest = User.digest reset_token
     update_columns reset_digest: digest, reset_sent_at: Time.zone.now
   end
 
-  # Sends password reset email.
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
   end
 
-  # Returns true if a password reset has expired.
   def password_reset_expired?
     reset_sent_at < Settings.time_limit.hours.ago
   end
 
+  def follow other_user
+    following << other_user
+  end
+
+  def unfollow other_user
+    following.delete other_user
+  end
+
+  def following? other_user
+    following.include? other_user
+  end
+
   private
-  # Converts email to all lower-case.
+
   def email_downcase
     email.downcase!
   end
 
-  # Creates and assigns the activation token and digest.
   def create_activation_digest
     self.activation_token  = User.new_token
     self.activation_digest = User.digest(activation_token)

@@ -6,6 +6,7 @@ pass:
   minimum: 6
 size: 80
 size_image: 50
+size_img_small: 30
 weigth_image: 5
 time_limit: 2
 content:
